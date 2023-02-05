@@ -13,6 +13,14 @@ db.serialize(() => {
       }
     }
   );
+  db.run(
+    "CREATE TABLE IF NOT EXISTS frontend_loggings( user_id INTEGER NOT NULL, component TEXT NOT NULL, action TEXT NOT NULL, dt TEXT NOT NULL)",
+    (err) => {
+      if (err) {
+        throw err;
+      }
+    }
+  );
 });
 const corsOpt: cors.CorsOptions = {
   origin: ["http://localhost:3000"],
@@ -61,6 +69,21 @@ app.post("/experiments", async (req: Request, res: Response) => {
 
         return res.json({ experimentGroup });
       }
+    }
+  );
+});
+
+app.post("/loggings", async (req: Request, res: Response) => {
+  const { userId, component, action } = req.body;
+
+  await db.run(
+    "INSERT INTO frontend_loggings(user_id, component, action, dt) VALUES ( ?, ?, ?, datetime('now'))",
+    [userId, component, action],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      return res.json({ success: true });
     }
   );
 });
