@@ -1,4 +1,4 @@
-import Analytics from "../analytics";
+import analytics from "../analytics";
 import axios from "axios";
 
 jest.mock("axios");
@@ -13,7 +13,7 @@ describe("Analytics class", () => {
       const post = jest
         .spyOn(axios, "post")
         .mockResolvedValue({ data: { success: true } });
-      await Analytics.log("BUTTON", "CLICK");
+      await analytics.log("BUTTON", "CLICK");
 
       expect(post).toHaveBeenCalled();
     });
