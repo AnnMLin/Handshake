@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Members from './Members';
 import Secrets from './Secrets';
 import {Context, getContext} from '../lib/context';
 import analytics from '../lib/analytics';
 import '../css/Tabs.css';
+import Experiment from '../lib/experiments';
+import { secretsTab, membersTab, view } from '../util/const'
 
 type State = {
   showSecrets: boolean;
@@ -21,12 +23,23 @@ export default function Tabs() {
   function showSecrets(): void {
     setState({showSecrets: true, showMembers: false});
     analytics.track('Secrets.Show');
+    analytics.log(secretsTab, view);
   }
 
   function showMembers(): void {
     setState({showSecrets: false, showMembers: true});
     analytics.track('Members.Show');
+    analytics.log(membersTab, view);
   }
+
+  // Add Members Experiment
+  const addMemberExp = new Experiment("add_members_exp");
+  useEffect(() => {
+    const { isEnabled: inAddMemberExp } = addMemberExp.activate();
+    if (inAddMemberExp) {
+      showMembers();
+    }
+  }, []);
 
   return (
     <div id="tabs">
