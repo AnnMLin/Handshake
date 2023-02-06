@@ -52,19 +52,21 @@ describe("Express app", () => {
       const body = {
         userId: 77,
         experimentName: "TEST_EXP",
+        experimentGroup: 'enabled',
       };
 
       const get = jest.spyOn(db, "get");
       const post = jest.spyOn(db, "run");
 
       const res = await request(app).post("/experiments").send(body);
-      expect(res.body.experimentGroup).toBe("enabled");
+      expect(res.body.success).toBeTruthy();
     });
 
     it("makes a GET call to database", async () => {
       const body = {
         userId: 77,
         experimentName: "TEST_EXP",
+        experimentGroup: 'enabled',
       };
 
       const get = jest.spyOn(db, "get");
@@ -77,6 +79,7 @@ describe("Express app", () => {
       const body = {
         userId: 78,
         experimentName: "TEST_EXP",
+        experimentGroup: 'enabled',
       };
 
       const post = jest.spyOn(db, "run");

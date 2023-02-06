@@ -4,7 +4,6 @@ import db from "./db";
 const express = require("express");
 const cors = require("cors");
 
-
 type Data = {
   experiment_group: string;
 };
@@ -30,22 +29,18 @@ app.post("/events", async (req: Request, res: Response) => {
 });
 
 app.post("/experiments", async (req: Request, res: Response) => {
-  const { userId, experimentName } = req.body;
-  if (!userId || !experimentName) {
+  const { userId, experimentName, experimentGroup } = req.body;
+  if (!userId || !experimentName || !experimentGroup) {
     return res.status(400).send("Request body incomplete");
   }
   await db.get(
-    "SELECT experiment_group FROM experiments WHERE experiment_name = ? AND user_id = ?",
-    [experimentName, userId],
+    "SELECT user_id FROM experiments WHERE experiment_name = ? AND user_id = ? AND experiment_group = ?",
+    [experimentName, userId, experimentGroup],
     async (err: Error, data: Data) => {
       if (err) {
         throw err;
       }
-      const experimentGroup = data ? data.experiment_group : null;
-      if (experimentGroup) {
-        return res.json({ experimentGroup });
-      } else {
-        const experimentGroup = userId % 2 ? "enabled" : "control";
+      if (!data) {
         await db.run(
           "INSERT INTO experiments(user_id, experiment_name, experiment_group, experiment_start_dt) VALUES ( ?, ?, ?, datetime('now'))",
           [userId, experimentName, experimentGroup],
@@ -55,9 +50,8 @@ app.post("/experiments", async (req: Request, res: Response) => {
             }
           }
         );
-
-        return res.json({ experimentGroup });
       }
+      return res.json({ success: true });
     }
   );
 });
