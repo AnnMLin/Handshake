@@ -11,11 +11,12 @@ describe("Experiment class", () => {
 
     it("makes axios POST calls", async () => {
       const exp = new Experiment("TEST_EXPERIMENT");
-      jest
+      const post = jest
         .spyOn(axios, "post")
         .mockResolvedValue({ data: { experimentGroup: "enabled" } });
       const inExp = await exp.activate();
 
+      expect(post).toHaveBeenCalled();
       expect(inExp).toEqual({ isEnabled: true });
     });
   });
