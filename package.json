@@ -3,9 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "concurrently -i -c green,blue -n frontend,server 'cd frontend && pnpm start' 'cd server && pnpm start'"
+    "start": "concurrently -i -c green,blue -n frontend,server 'cd frontend && pnpm start' 'cd server && pnpm start'",
+    "test": "jest"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "@types/jest": "^29.4.0",
+    "@types/supertest": "^2.0.12",
+    "concurrently": "^7.6.0",
+    "jest": "^29.4.1",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.0.5"
   }
 }

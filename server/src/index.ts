@@ -1,10 +1,17 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
+import { Request, Response } from "express";
+import { CorsOptions } from "cors";
 import db from "./db";
+const express = require("express");
+const cors = require("cors");
+
+
+type Data = {
+  experiment_group: string;
+};
 
 const app = express();
 
-const corsOpt: cors.CorsOptions = {
+const corsOpt: CorsOptions = {
   origin: ["http://localhost:3000"],
 };
 
@@ -24,17 +31,17 @@ app.post("/events", async (req: Request, res: Response) => {
 
 app.post("/experiments", async (req: Request, res: Response) => {
   const { userId, experimentName } = req.body;
-
+  if (!userId || !experimentName) {
+    return res.status(400).send("Request body incomplete");
+  }
   await db.get(
     "SELECT experiment_group FROM experiments WHERE experiment_name = ? AND user_id = ?",
     [experimentName, userId],
-    async (err, data) => {
+    async (err: Error, data: Data) => {
       if (err) {
         throw err;
       }
-
       const experimentGroup = data ? data.experiment_group : null;
-
       if (experimentGroup) {
         return res.json({ experimentGroup });
       } else {
@@ -42,7 +49,7 @@ app.post("/experiments", async (req: Request, res: Response) => {
         await db.run(
           "INSERT INTO experiments(user_id, experiment_name, experiment_group, experiment_start_dt) VALUES ( ?, ?, ?, datetime('now'))",
           [userId, experimentName, experimentGroup],
-          (err) => {
+          (err: Error) => {
             if (err) {
               throw err;
             }
@@ -57,11 +64,13 @@ app.post("/experiments", async (req: Request, res: Response) => {
 
 app.post("/loggings", async (req: Request, res: Response) => {
   const { userId, component, action } = req.body;
-
+  if (!userId || !component || !action) {
+    return res.status(400).send("Request body incomplete");
+  }
   await db.run(
     "INSERT INTO frontend_loggings(user_id, component, action, dt) VALUES ( ?, ?, ?, datetime('now'))",
     [userId, component, action],
-    (err) => {
+    (err: Error) => {
       if (err) {
         throw err;
       }
@@ -71,3 +80,5 @@ app.post("/loggings", async (req: Request, res: Response) => {
 });
 
 app.listen({ port: 8081 });
+
+export default app;
