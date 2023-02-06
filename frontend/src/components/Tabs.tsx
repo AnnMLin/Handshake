@@ -60,7 +60,7 @@ export default function Tabs(props: Props) {
         data-testid={"secrets-tab"}
         className={`tab ${state.showSecrets ? "" : "hidden"}`}
       >
-        <Secrets />
+        <Secrets ctx={props.ctx}/>
       </div>
 
       <div
