@@ -1,4 +1,3 @@
-import { getContext } from "./context";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8081";
 
@@ -7,9 +6,9 @@ class Experiment {
   name: string;
   group: string;
 
-  constructor(name: string) {
+  constructor(userId: number, name: string) {
     this.name = name;
-    this.userId = getContext().userId;
+    this.userId = userId;
     this.group = this.userId % 2 ? "enabled" : "control";
   }
 

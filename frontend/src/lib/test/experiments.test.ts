@@ -2,9 +2,9 @@ import Experiment from "../experiments";
 import axios from "axios";
 
 jest.mock("axios");
-jest.mock("../context", () => ({
-  getContext: jest.fn(() => ({ userId: 111 })),
-}));
+
+const testUserId = 111;
+const testExpName = "TEST_EXPERIMENT";
 
 describe("Experiment class", () => {
   describe("activate method", () => {
@@ -13,7 +13,7 @@ describe("Experiment class", () => {
     });
 
     it("makes axios POST calls", async () => {
-      const exp = new Experiment("TEST_EXPERIMENT");
+      const exp = new Experiment(testUserId, testExpName);
       jest.spyOn(axios, "post").mockResolvedValue({ data: { success: true } });
       const inExp = await exp.activate();
       expect(inExp).toEqual({ isEnabled: true });
@@ -26,7 +26,7 @@ describe("Experiment class", () => {
     });
 
     it("makes axios POST calls", async () => {
-      const exp = new Experiment("TEST_EXPERIMENT");
+      const exp = new Experiment(testUserId, testExpName);
       const post = jest
         .spyOn(axios, "post")
         .mockResolvedValue({ data: { success: true } });

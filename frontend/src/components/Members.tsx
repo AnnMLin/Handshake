@@ -1,11 +1,14 @@
 import React from 'react';
 import Member from './Member';
 import AddMember from './AddMember';
-import {getContext, Context} from '../lib/context';
+import { Context } from '../lib/context';
 import '../css/Members.css';
 
-export default function Members() {
-  const ctx: Context = getContext();
+type Props = {
+  ctx: Context;
+}
+
+export default function Members(props: Props) {
 
   return (
     <>
@@ -17,7 +20,7 @@ export default function Members() {
         <Member name='Jane Doe' role='Admin' email='jane@example.com' />
         <Member name='Jon Smith' role='Member' email='jon@example.com' />
       </table>
-      <AddMember />
+      <AddMember ctx={props.ctx}/>
     </>
   )
 }

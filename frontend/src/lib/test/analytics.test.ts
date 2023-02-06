@@ -3,6 +3,8 @@ import axios from "axios";
 
 jest.mock("axios");
 
+const testUserId = 111;
+
 describe("Analytics class", () => {
   describe("log method", () => {
     afterEach(() => {
@@ -13,7 +15,7 @@ describe("Analytics class", () => {
       const post = jest
         .spyOn(axios, "post")
         .mockResolvedValue({ data: { success: true } });
-      await analytics.log("BUTTON", "CLICK");
+      await analytics.log(testUserId, "BUTTON", "CLICK");
 
       expect(post).toHaveBeenCalled();
     });

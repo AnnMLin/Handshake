@@ -1,8 +1,11 @@
 import React from 'react';
 import Tabs from './Tabs';
 import '../css/App.css';
+import { Context, getContext } from '../lib/context';
 
 export default function App() {
+  const ctx: Context = getContext();
+
   return (
     <div id="page">
       <h1>
@@ -11,7 +14,7 @@ export default function App() {
         prod
       </h1>
       <div id="main">
-        <Tabs />
+        <Tabs ctx={ctx}/>
       </div>
     </div>
   );
