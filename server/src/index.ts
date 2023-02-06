@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { CorsOptions } from "cors";
 import db from "./db";
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 
 type Data = {
   experiment_group: string;
