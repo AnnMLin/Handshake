@@ -1,8 +1,6 @@
-import { Request, Response } from "express";
-import { CorsOptions } from "cors";
+import express, { Request, Response } from "express";
+import cors, { CorsOptions } from "cors";
 import db from "./db";
-import express from "express";
-import cors from "cors";
 
 type Data = {
   experiment_group: string;
