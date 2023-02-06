@@ -37,10 +37,10 @@ export default function Tabs(props: Props) {
   }
 
   // Add Members Experiment
-  const addMemberExp = new Experiment(userId, "add_members_exp");
+  const addMembersExp = new Experiment(userId, "add_members_exp");
   useEffect(() => {
-    const { isEnabled: inAddMemberExp } = addMemberExp.activate();
-    if (inAddMemberExp) {
+    const { isEnabled: inAddMembersExp } = addMembersExp.activate();
+    if (inAddMembersExp) {
       showMembers();
     }
   }, []);

@@ -1,6 +1,6 @@
 import React from 'react';
 import analytics from '../lib/analytics';
-import { addMemberButton, view, click } from '../util/const';
+import { addMemberButton, click } from '../util/const';
 import { Context } from '../lib/context';
 
 type Props = {
