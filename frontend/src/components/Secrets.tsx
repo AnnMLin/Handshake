@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Secret from './Secret';
 import AddSecret from './AddSecret';
 import { Context } from '../lib/context';
-import Experiment from "../lib/experiments";
+import Experiment from "../lib/experiment";
 
 type Props = {
   ctx: Context;

@@ -1,4 +1,4 @@
-import Experiment from "../experiments";
+import Experiment from "../experiment";
 import axios from "axios";
 
 jest.mock("axios");

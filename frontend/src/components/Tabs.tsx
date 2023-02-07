@@ -4,7 +4,7 @@ import Secrets from "./Secrets";
 import { Context } from "../lib/context";
 import analytics from "../lib/analytics";
 import "../css/Tabs.css";
-import Experiment from "../lib/experiments";
+import Experiment from "../lib/experiment";
 import { secretsTab, membersTab, view } from "../util/const";
 
 type State = {
