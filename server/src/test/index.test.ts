@@ -1,10 +1,11 @@
 import request from "supertest";
-import app from "../index";
+import app, { server } from "../index";
 import db from "../db";
 
 describe("Express app", () => {
   afterAll(() => {
     db.close();
+    server.close();
   });
 
   describe("POST /loggings endpoint", () => {

@@ -71,6 +71,6 @@ app.post("/loggings", async (req: Request, res: Response) => {
   );
 });
 
-app.listen({ port: 8081 });
+export const server = app.listen({ port: 8081 });
 
 export default app;
