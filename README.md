@@ -44,7 +44,9 @@ ctx.userId;
 
 ## Backend
 
-The backend is an Express API used to collect analytics events and nothing else. It has one endpoint:
+The backend is an Express API. It has three endpoints: 
+
+The POST events endpoint is used to collect analytics events.
 
 ```http
 POST /events
@@ -53,34 +55,39 @@ Content-Type: application/json
 { "name": "Event.Name" }
 ```
 
+The POST experiments endpoint is used to collect experiment activation data.
+
+```http
+POST /experiments
+Content-Type: application/json
+
+{
+    "userId": 12345,
+    "experimentName": "add_members_exp",
+    "experimentGroup": "enabled,
+}
+```
+
+The POST loggings endpoint is used to collect frontend loggings.
+
+```http
+POST /loggings
+Content-Type: application/json
+
+{
+    "userId": 12345,
+    "component": "ADD_MEMBER_BUTTON",
+    "action": "CLICK",
+}
+```
+
 ### analytics.sqlite
 
 A SQLite database is already included, with a table called `events` already created.
 A table called `experiments` is created to track experiment activations.
 A table called `frontend_loggings` is to track frontend loggings.
 
-### Experiment("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test("axios");
-
-const testUserId = 111;
-const test
+### Experiment;
 
 The Experiment class is able to activate experiments on users by bucketing users into enabled and control groups by user ids.
 
@@ -88,10 +95,14 @@ The Experiment class is able to activate experiments on users by bucketing users
 
 import Experiment from '../lib/experiment'
 
-const newExperiment = new Experiment('add_members_exp') // creates a new experiment object with experiment group
-const {isEnabled} = newExperiment.activate() // activates experiment on user and save experiment activation to DB `experiments` table
+// Creates a new experiment object with experiment group
+const newExperiment = new Experiment('add_members_exp') 
+
+// activates experiment on user and save experiment activation to DB experiments table
+const {isEnabled} = newExperiment.activate() 
+
 if(isEnabled) {
-    // do something
+    // do something for the enabled group
 }
 
 ```
