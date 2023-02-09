@@ -64,7 +64,7 @@ Content-Type: application/json
 {
     "userId": 12345,
     "experimentName": "add_members_exp",
-    "experimentGroup": "enabled,
+    "experimentGroup": "enabled",
 }
 ```
 
