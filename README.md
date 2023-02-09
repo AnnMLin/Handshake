@@ -95,14 +95,14 @@ The Experiment class is able to activate experiments on users by bucketing users
 
 import Experiment from '../lib/experiment'
 
-// Creates a new experiment object with experiment group
+// Create an experiment instance with experiment group to bucket users into experiments 
 const newExperiment = new Experiment('add_members_exp') 
 
-// activates experiment on user and save experiment activation to DB experiments table
+// Activate experiment for user and save experiment activation to DB experiments table
 const {isEnabled} = newExperiment.activate() 
 
 if(isEnabled) {
-    // do something for the enabled group
+    // do something for enabled group users
 }
 
 ```
@@ -126,7 +126,7 @@ FROM
         FROM
             experiments
         WHERE
-            experiment_name = 'experiment_name'
+            experiment_name = 'add_members_exp'
     ) exp
 LEFT JOIN
     (
@@ -135,7 +135,7 @@ LEFT JOIN
         FROM
             frontend_loggings
         WHERE
-            dt >= '2023-02-06' -- experiment launch date
+            dt >= '2023-02-06' -- eexample xperiment launch date
             AND component = 'ADD_MEMBER_BUTTON'
             AND action = 'CLICK'
     ) log ON log.user_id = exp.user_id
