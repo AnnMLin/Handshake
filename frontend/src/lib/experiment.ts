@@ -5,15 +5,20 @@ class Experiment {
   userId: number;
   name: string;
   group: string;
+  isActivated: boolean;
 
   constructor(userId: number, name: string) {
     this.name = name;
     this.userId = userId;
     this.group = this.userId % 2 ? "enabled" : "control";
+    this.isActivated = false;
   }
 
   activate() {
-    this.saveActivation();
+    if(!this.isActivated) {
+      this.isActivated = true;
+      this.saveActivation();
+    }
 
     return { isEnabled: this.group === "enabled" };
   }

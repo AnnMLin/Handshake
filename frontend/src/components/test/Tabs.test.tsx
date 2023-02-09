@@ -4,6 +4,8 @@
 
 import { render, screen } from "@testing-library/react";
 import Tabs from "../Tabs";
+import { ExperimentContext } from "../App";
+import Experiment from "../../lib/experiment";
 
 jest.mock("../../css/App.css", () => {});
 jest.mock("../../css/index.css", () => {});
@@ -18,7 +20,16 @@ describe("<Tabs />", () => {
       userId: 123,
     };
 
-    render(<Tabs ctx={mockContext} />);
+    const mockExperiments = {
+      addMembersExp: new Experiment(mockContext.userId, "add_members_exp"),
+      saveSecretsExp: new Experiment(mockContext.userId, "save_secrets_exp"),
+    };
+
+    render(
+      <ExperimentContext.Provider value={mockExperiments}>
+        <Tabs ctx={mockContext} />
+      </ExperimentContext.Provider>
+    );
 
     const secretsTab = await screen.findByTestId("secrets-tab");
     const membersTab = await screen.findByTestId("members-tab");
@@ -32,7 +43,16 @@ describe("<Tabs />", () => {
       userId: 12,
     };
 
-    render(<Tabs ctx={mockContext} />);
+    const mockExperiments = {
+      addMembersExp: new Experiment(mockContext.userId, "add_members_exp"),
+      saveSecretsExp: new Experiment(mockContext.userId, "save_secrets_exp"),
+    };
+
+    render(
+      <ExperimentContext.Provider value={mockExperiments}>
+        <Tabs ctx={mockContext} />
+      </ExperimentContext.Provider>
+    );
 
     const secretsTab = await screen.findByTestId("secrets-tab");
     const membersTab = await screen.findByTestId("members-tab");

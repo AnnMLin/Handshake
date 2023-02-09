@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Secret from './Secret';
 import AddSecret from './AddSecret';
 import { Context } from '../lib/context';
-import Experiment from "../lib/experiment";
+import { ExperimentContext } from "./App"
 
 type Props = {
   ctx: Context;
+  show: boolean;
 }
 
-type State = boolean
-
 export default function Secrets(props: Props) {
-  const userId = props.ctx.userId;
 
-  const [inSaveSecretsExp, setInSaveSecretsExp] = useState<State>(false);
+  const [inSaveSecretsExp, setInSaveSecretsExp] = useState<boolean>(false);
+  const [showSecrets, setShowSecrets] = useState<boolean>(true)
 
+  const { saveSecretsExp } = useContext(ExperimentContext)
 
-  // Save Secrets Experiment
-  const saveSecretsExp = new Experiment(userId, "save_secrets_exp");
   useEffect(() => {
-    const { isEnabled } = saveSecretsExp.activate();
-    if(isEnabled) {
-      setInSaveSecretsExp(true)
+    setShowSecrets(props.show);
+    // Only activating users into experiment if user can actually view the Secrets page to avoid dilution
+    if(!showSecrets && props.show) {
+      const { isEnabled } = saveSecretsExp.activate();
+      if(isEnabled) {
+        setInSaveSecretsExp(true);
+      }
     }
-  }, []);
+  }, [props.show]);
 
   if(inSaveSecretsExp) {
     return (

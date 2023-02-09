@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Members from "./Members";
 import Secrets from "./Secrets";
 import { Context } from "../lib/context";
 import analytics from "../lib/analytics";
 import "../css/Tabs.css";
-import Experiment from "../lib/experiment";
 import { secretsTab, membersTab, view } from "../util/const";
+import { ExperimentContext } from "./App"
 
 type State = {
   showSecrets: boolean;
@@ -36,8 +36,7 @@ export default function Tabs(props: Props) {
     analytics.log(userId, membersTab, view);
   }
 
-  // Add Members Experiment
-  const addMembersExp = new Experiment(userId, "add_members_exp");
+  const { addMembersExp } = useContext(ExperimentContext)
   useEffect(() => {
     const { isEnabled: inAddMembersExp } = addMembersExp.activate();
     if (inAddMembersExp) {
@@ -60,7 +59,7 @@ export default function Tabs(props: Props) {
         data-testid={"secrets-tab"}
         className={`tab ${state.showSecrets ? "" : "hidden"}`}
       >
-        <Secrets ctx={props.ctx}/>
+        <Secrets ctx={props.ctx} show={state.showSecrets} />
       </div>
 
       <div
