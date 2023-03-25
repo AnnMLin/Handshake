@@ -2,8 +2,11 @@ import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import db from "./db";
 
-type Data = {
-  experiment_group: string;
+type Student = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  check_in_time: string;
 };
 
 const app = express();
@@ -15,60 +18,17 @@ const corsOpt: CorsOptions = {
 app.use(express.json());
 app.use(cors(corsOpt));
 
-app.post("/events", async (req: Request, res: Response) => {
-  const name = req.body.name;
-  const timestamp = new Date().getTime();
-
-  await db.run(
-    "INSERT INTO events (name, timestamp) VALUES (?, datetime('now'))",
-    [name]
-  );
-  return res.json({ success: true });
-});
-
-app.post("/experiments", async (req: Request, res: Response) => {
-  const { userId, experimentName, experimentGroup } = req.body;
-  if (!userId || !experimentName || !experimentGroup) {
-    return res.status(400).send("Request body incomplete");
-  }
-  await db.get(
-    "SELECT user_id FROM experiments WHERE experiment_name = ? AND user_id = ? AND experiment_group = ?",
-    [experimentName, userId, experimentGroup],
-    async (err: Error, data: Data) => {
-      if (err) {
-        throw err;
-      }
-      if (!data) {
-        await db.run(
-          "INSERT INTO experiments(user_id, experiment_name, experiment_group, experiment_start_dt) VALUES ( ?, ?, ?, datetime('now'))",
-          [userId, experimentName, experimentGroup],
-          (err: Error) => {
-            if (err) {
-              throw err;
-            }
-          }
-        );
-      }
-      return res.json({ success: true });
+app.get("/index", async (req: Request, res: Response) => {
+  const sql = "SELECT * FROM students";
+  const params: any = [];
+  db.all(sql, params, (err: Error, rows: Array<Student>) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    } else {
+      return res.status(200).json(rows);
     }
-  );
-});
-
-app.post("/loggings", async (req: Request, res: Response) => {
-  const { userId, component, action } = req.body;
-  if (!userId || !component || !action) {
-    return res.status(400).send("Request body incomplete");
-  }
-  await db.run(
-    "INSERT INTO frontend_loggings(user_id, component, action, dt) VALUES ( ?, ?, ?, datetime('now'))",
-    [userId, component, action],
-    (err: Error) => {
-      if (err) {
-        throw err;
-      }
-      return res.json({ success: true });
-    }
-  );
+  });
 });
 
 export const server = app.listen({ port: 8081 });
